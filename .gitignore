@@ -1,23 +1,225 @@
-# Compiled class file
-*.class
+import java.util.*;
 
-# Log file
-*.log
+public class Main {
 
-# BlueJ files
-*.ctxt
+	public static int numA;
+	public static int numB;
+	public static Scanner gIN = new Scanner(System.in);
+	public static int problem;
+	public static int integerN;
+	
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+	public static void main(String[] args) {
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+		System.out.println("Please select a problem to solve");
+		System.out.println("1. Primes, GCD, LCM");
+		System.out.println("2. Binomial Theorem");
+		System.out.println("3. Exit");
+		Scanner scan = new Scanner(System.in);
+		problem = scan.nextInt();
+		if (problem == 1) {
+			primesGcdLcd();
+		} else if(problem == 2) {
+			binomialTheorem();
+		} else if(problem == 3) {
+			System.exit(0);
+		}
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+	}
+	
+	
+	//Asks the user for the input to return binomial theorem expansion
+	public static void binomialTheorem() {
+		System.out.println("\nPlease enter an integer n(1<n<10) or type 0 to exit");
+		Scanner scanBinomial = new Scanner(System.in);
+		integerN = scanBinomial.nextInt();
+		if(integerN == 0) {
+			main(null);
+		} else {
+			while(integerN > 10 || integerN < 1) {
+				System.out.println("Invalid value. Please enter an integer within the specified boundries (1<n<10)");
+				integerN = scanBinomial.nextInt();
+			}
+		}
+		
+		binomialExpansion(integerN);
+		System.out.println("");
+		main(null);
+	}
+	
+	
+	//Calculates the factorial of a given number for the binomial theorem using recursion
+	public static int factorial(int n) {
+		if (n == 0)
+			return 1;
+		else
+			return(n * factorial(n-1));
+	}
+	
+	
+	
+	//Prints the binomial theorem expansion using the binomial theorem formula
+	public static void binomialExpansion(int n) {
+		
+		
+		int k = 0;
+		String output = "";
+		
+		while (k <= n) {
+			int coefficient = factorial(n) / (factorial(k) * (factorial(n-k)));
+			int exponent = n-k;
+			
+			String x = "";
+			if(exponent == 1)
+				x = "(x)";
+			else if(exponent != 0)
+				x = "(x^" + exponent + ")";
+			String y = "";
+			if(k == 1)
+				y = "(y)";
+			else if(k != 0)
+				y = "(y^" + k + ")";
+			
+			if(coefficient == 1)
+				output += x + y;
+			else if(coefficient != 0)
+				output += coefficient + x + y;
+			
+			
+			if(k != n) 
+				output += " + ";
+			
+			k++;
+		}
+		System.out.println("The binomial theorem expansion for (x+y)^" + n + ":");
+		System.out.println(output);
+	}
+	
+	
+	
+	
+	
+	
+	public static void primesGcdLcd() {
+		System.out.println("Welcome to the Prime, GCD, and LCM calculator");
+		System.out.println("");
+		System.out.print("Please input integer A: ");
+		Scanner scnr = new Scanner(System.in);
+		System.out.print("");
+		numA = scnr.nextInt();
+		System.out.print("Please input integer B: ");
+		numB = scnr.nextInt();
+
+		while (true) {
+			System.out.println("");
+			System.out.println("MAIN MENU");
+			System.out.println("0 - Exit, 1 - GCD , 2 - LCM , 3 - Prime factors of A , 4 - Prime factor of B ");
+			System.out.println("");
+			System.out.print("Select an option: ");
+			int option = gIN.nextInt();
+			if (option == 0) {
+				//System.out.println("");
+				//System.out.println("Thank you for using the Prime, GCD, and LCM calculator! Bye!");
+				System.out.println("");
+				main(null);
+				return;
+			}
+
+			while (!(option == 0)) {
+
+				if (option == 1) {
+					numGcd();
+					break;
+				} else if (option == 2) {
+					numLcm();
+					break;
+				} else if (option == 3) {
+					primeA();
+					break;
+				} else if (option == 4) {
+					primeB();
+					break;
+				} else {
+					System.out.println("Value out of range, please try again.");
+					System.out.println("Select an option: ");
+					option = gIN.nextInt();
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	public static void numGcd() {
+		int gcd = 1;
+		int n1;
+		int n2;
+		n1 = numA;
+		n2 = numB;
+
+		for (int i = 1; i <= n1 && i <= n2; ++i) {
+
+			if (n1 % i == 0 && n2 % i == 0)
+				gcd = i;
+		}
+		System.out.println("");
+		System.out.println("GCD of " + n1 + " and " + n2 + " is: " + gcd);
+	}
+
+	public static void numLcm() {
+		int lcm;
+		int n1;
+		int n2;
+		n1 = numA;
+		n2 = numB;
+		lcm = (n1 > n2) ? n1 : n2;
+
+		while (true) {
+			if (lcm % n1 == 0 && lcm % n2 == 0) {
+				System.out.println("");
+				System.out.printf("The LCM of %d and %d is %d.", n1, n2, lcm);
+				break;
+			}
+			++lcm;
+		}
+
+		System.out.println();
+	}
+
+	public static void primeA() {
+		int n1;
+		n1 = numA;
+		for (int i = 2; i < n1; i++) {
+			while (n1 % i == 0) {
+				System.out.println(i + " ");
+				n1 = n1 / i;
+			}
+		}
+		if (n1 > 2) {
+			System.out.println(n1);
+		}
+	}
+
+	public static void primeB() {
+		int n2;
+		n2 = numB;
+		for (int i = 2; i < n2; i++) {
+			while (n2 % i == 0) {
+				System.out.println(i + " ");
+				n2 = n2 / i;
+			}
+		}
+		if (n2 > 2) {
+			System.out.println(n2);
+		}
+	}
+
+}
